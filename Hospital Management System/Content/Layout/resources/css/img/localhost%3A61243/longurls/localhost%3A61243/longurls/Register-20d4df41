@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    <link rel="stylesheet" type="text/css" href="/Content/Layout/vendors/css/grid.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layout/vendors/css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layout/vendors/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layout/resources/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/Content/Layout/vendors/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layout/resources/css/queries.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/Content/Layout/resources/img/logo.jpg" />
+    <title>Hospital Management System</title>
+    
+</head>
+    
+<body>
+        
+
+
+
+<section class="section-form" id="contact">
+    <div class="row">
+        <h2>Register.</h2>
+    </div>
+<form action="/Account/Register" class="form-horizontal" method="post" role="form"><input name="__RequestVerificationToken" type="hidden" value="CoSCUQbkz1jKu0nI2EpBh_Q1uLg3PA3F0V8vhcFBmWweQjjczi61rxiDF1J4GgwDPdgos0YxuUJrQQ7hev_yqgghkOUZk-56xI3HDu3akGU1" />        <div class="row">
+            <div class="col span-1-of-4">
+
+            </div>
+            <div class="col span-2-of-4">
+                <div class="plan-box">
+                    <div>
+                        <div class="validation-summary-valid text-danger" data-valmsg-summary="true"><ul><li style="display:none"></li>
+</ul></div>
+                        <div>
+                            <label for="name">User Name<span style="color: red; font-weight: bold">*</span></label>
+                            <input data-val="true" data-val-required="The User Name field is required." id="name" name="UserName" placeholder="User Name" type="text" value="" />
+                            
+                        </div>
+                        <div>
+                            <label for="fname">First Name<span style="color: red; font-weight: bold">*</span></label>
+                            <input data-val="true" data-val-required="The First Name field is required." id="fname" name="FirstName" placeholder="First Name" type="text" value="" />
+                            
+                        </div>
+                        <div>
+                            <label for="lname">Last Name<span style="color: red; font-weight: bold">*</span></label>
+                            <input data-val="true" data-val-required="The Last Name field is required." id="lname" name="LastName" placeholder="Last Name" type="text" value="" />
+                            
+                        </div>
+                        <div>
+                            <label for="email">Email<span style="color: red; font-weight: bold">*</span></label>
+                            <input data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="email" name="Email" placeholder="Your Email" type="text" value="" />
+                            
+                        </div>
+                        
+                        <div>
+                            <label for="password">Password<span style="color: red; font-weight: bold">*</span></label>
+                            <input data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="password" name="Password" placeholder="Password" type="password" />
+                            
+                        </div>
+
+                        <div>
+                            <label for="cpassword">Password<span style="color: red; font-weight: bold">*</span></label>
+                            <input data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" id="cpassword" name="ConfirmPassword" placeholder="Confirm Password" type="password" />
+                            
+                        </div>
+                        <br/>
+                        <p>
+                            <a href="/Account/Login">Already a user?</a>
+                        </p>
+                    </div>
+                    <div style="text-align: center !important">
+                        <input type="submit" value="Register" class="btn btn-ghost">
+                    </div>
+                </div>
+            </div>
+            <div class="col span-1-of-4">
+
+            </div>
+        </div>
+        <div style="text-align: center" class="row">
+            <a href="/">Back to Home</a>
+        </div>
+</form>
+</section>
+
+
+
+     
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/selectivizr@1.0.3/selectivizr.min.js"></script>
+<script src="/Content/Layout/vendors/js/jquery.waypoints.min.js"></script>
+<script src="/Content/Layout/resources/js/script.js"></script>
+
+    <script src="/Scripts/jquery.validate.js"></script>
+<script src="/Scripts/jquery.validate.unobtrusive.js"></script>
+
+   
+</body>
+    
+</html>
+
