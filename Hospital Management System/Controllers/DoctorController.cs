@@ -169,25 +169,33 @@ namespace Hospital_Management_System.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPrescription(int id, Prescription model)
         {
-            var prescription = db.Prescription.Single(c => c.Id == id);
+            var prescription = db.Prescription.Single(p => p.Id == id);
             prescription.MedicalTest1 = model.MedicalTest1;
             prescription.MedicalTest2 = model.MedicalTest2;
-            prescription.MedicalTest3 = model.MedicalTest3;
-            prescription.MedicalTest4 = model.MedicalTest4;
+
+                 prescription.MedicalTest4 = model.MedicalTest4;
             prescription.Medicine1 = model.Medicine1;
             prescription.Medicine2 = model.Medicine2;
+            prescription.MedicalTest3 = model.MedicalTest3;
+       
             prescription.Medicine3 = model.Medicine3;
-            prescription.Medicine4 = model.Medicine4;
-            prescription.Medicine5 = model.Medicine5;
-            prescription.Medicine6 = model.Medicine6;
-            prescription.Medicine7 = model.Medicine7;
             prescription.Morning1 = model.Morning1;
             prescription.Morning2 = model.Morning2;
             prescription.Morning3 = model.Morning3;
             prescription.Morning4 = model.Morning4;
+            prescription.Medicine4 = model.Medicine4;
+            prescription.Medicine5 = model.Medicine5;
+            prescription.Medicine6 = model.Medicine6;
+            prescription.Medicine7 = model.Medicine7;
+ 
             prescription.Morning5 = model.Morning5;
             prescription.Morning6 = model.Morning6;
             prescription.Morning7 = model.Morning7;
+            prescription.Evening1 = model.Evening1;
+            prescription.Evening2 = model.Evening2;
+            prescription.Evening3 = model.Evening3;
+            prescription.Evening4 = model.Evening4;
+            prescription.Evening5 = model.Evening5;
             prescription.Afternoon1 = model.Afternoon1;
             prescription.Afternoon2 = model.Afternoon2;
             prescription.Afternoon3 = model.Afternoon3;
@@ -195,11 +203,7 @@ namespace Hospital_Management_System.Controllers
             prescription.Afternoon5 = model.Afternoon5;
             prescription.Afternoon6 = model.Afternoon6;
             prescription.Afternoon7 = model.Afternoon7;
-            prescription.Evening1 = model.Evening1;
-            prescription.Evening2 = model.Evening2;
-            prescription.Evening3 = model.Evening3;
-            prescription.Evening4 = model.Evening4;
-            prescription.Evening5 = model.Evening5;
+      
             prescription.Evening6 = model.Evening6;
             prescription.Evening7 = model.Evening7;
             prescription.CheckUpAfterDays = model.CheckUpAfterDays;
@@ -234,10 +238,12 @@ namespace Hospital_Management_System.Controllers
         public ActionResult EditSchedule(int id, Schedule model)
         {
             var schedule = db.Schedules.Single(c => c.Id == id);
+
+            schedule.AvailableStartTime = model.AvailableStartTime;
+
             schedule.AvailableEndDay = model.AvailableEndDay;
             schedule.AvailableEndTime = model.AvailableEndTime;
             schedule.AvailableStartDay = model.AvailableStartDay;
-            schedule.AvailableStartTime = model.AvailableStartTime;
             schedule.Status = model.Status;
             schedule.TimePerPatient = model.TimePerPatient;
             db.SaveChanges();
@@ -273,10 +279,14 @@ namespace Hospital_Management_System.Controllers
                 var doctor = db.Doctors.Single(c => c.ApplicationUserId == user);
                 var appointment = new Appointment();
                 appointment.PatientId = model.Appointment.PatientId;
+          
+                appointment.Status = model.Appointment.Status;
+
+
                 appointment.DoctorId = doctor.Id;
                 appointment.AppointmentDate = model.Appointment.AppointmentDate;
                 appointment.Problem = model.Appointment.Problem;
-                appointment.Status = model.Appointment.Status;
+
 
                 db.Appointments.Add(appointment);
                 db.SaveChanges();
@@ -299,9 +309,10 @@ namespace Hospital_Management_System.Controllers
         [Authorize(Roles = "Doctor")]
         public ActionResult ActiveAppointments()
         {
+
+            var date = DateTime.Now.Date;
             var user = User.Identity.GetUserId();
             var doctor = db.Doctors.Single(c => c.ApplicationUserId == user);
-            var date = DateTime.Now.Date;
             var appointment = db.Appointments.Include(c => c.Doctor).Include(c => c.Patient).Where(c => c.DoctorId == doctor.Id).Where(c => c.Status == true).Where(c => c.AppointmentDate >= date).ToList();
             return View(appointment);
         }
@@ -309,9 +320,10 @@ namespace Hospital_Management_System.Controllers
         //List of Pending Appointments
         public ActionResult PendingAppointments()
         {
+           
+            var date = DateTime.Now.Date;
             var user = User.Identity.GetUserId();
             var doctor = db.Doctors.Single(c => c.ApplicationUserId == user);
-            var date = DateTime.Now.Date;
             var appointment = db.Appointments.Include(c => c.Doctor).Include(c => c.Patient).Where(c => c.DoctorId == doctor.Id).Where(c => c.Status == false).Where(c => c.AppointmentDate >= date).ToList();
             return View(appointment);
         }
@@ -340,10 +352,12 @@ namespace Hospital_Management_System.Controllers
             if (model.Appointment.AppointmentDate >= DateTime.Now.Date)
             {
                 var appointment = db.Appointments.Single(c => c.Id == id);
+
                 appointment.PatientId = model.Appointment.PatientId;
                 appointment.AppointmentDate = model.Appointment.AppointmentDate;
-                appointment.Problem = model.Appointment.Problem;
+
                 appointment.Status = model.Appointment.Status;
+                appointment.Problem = model.Appointment.Problem;
                 db.SaveChanges();
                 if (model.Appointment.Status == true)
                 {

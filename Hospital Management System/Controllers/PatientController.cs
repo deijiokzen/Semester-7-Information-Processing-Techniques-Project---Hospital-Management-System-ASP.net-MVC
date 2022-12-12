@@ -13,72 +13,91 @@ namespace Hospital_Management_System.Controllers
     public class PatientController : Controller
     {
         private ApplicationDbContext db;
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
         //Constructor
         public PatientController()
         {
             db = new ApplicationDbContext();
         }
-
         //Destructor
         protected override void Dispose(bool disposing)
         {
             db.Dispose();
-        }
+        }        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
+
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+
+        //Update Patient profile
+        [Authorize(Roles = "Patient")]        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        public ActionResult UpdateProfile(string id)
+        {        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            var patient = db.Patients.Single(c => c.ApplicationUserId == id);        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            return View(patient);
+        }
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        public ActionResult UpdateProfile(string id, Patient model)
+        {
+            var patient = db.Patients.Single(c => c.ApplicationUserId == id);
+            patient.FirstName = model.FirstName;
+            patient.LastName = model.LastName;
+            patient.Address = model.Address;
+            patient.DateOfBirth = model.DateOfBirth;        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            patient.Gender = model.Gender;
+            patient.BloodGroup = model.BloodGroup;
+   
+            patient.PhoneNo = model.PhoneNo;
+            patient.FullName = model.FirstName + " " + model.LastName;        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            patient.Contact = model.Contact;
+            //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            db.SaveChanges();
+            return View();
+        }
         [Authorize(Roles = "Patient")]
         public ActionResult Index(string message)
-        {
+        {        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
             ViewBag.Messege = message;
             string user = User.Identity.GetUserId();
             var patient = db.Patients.Single(c => c.ApplicationUserId == user);
             var date = DateTime.Now.Date;
             var model = new CollectionOfAll
             {
-                Ambulances = db.Ambulances.ToList(),
+                Ambulances = db.Ambulances.ToList(),        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
                 Departments = db.Department.ToList(),
-                Doctors = db.Doctors.ToList(),
                 Patients = db.Patients.ToList(),
-                Medicines = db.Medicines.ToList(),
-                ActiveAppointments = db.Appointments.Where(c => c.Status).Where(c => c.PatientId == patient.Id).Where(c => c.AppointmentDate >= date).ToList(),
+                Medicines = db.Medicines.ToList(),        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+                Doctors = db.Doctors.ToList(),
+
+                ActiveAppointments = db.Appointments.Where(c => c.Status).Where(c => c.PatientId == patient.Id).Where(c => c.AppointmentDate >= date).ToList(),        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
                 PendingAppointments = db.Appointments.Where(c => c.Status == false).Where(c => c.PatientId == patient.Id).Where(c => c.AppointmentDate >= date).ToList(),
                 AmbulanceDrivers = db.AmbulanceDrivers.ToList(),
                 Announcements = db.Announcements.Where(c => c.AnnouncementFor == "Patient").ToList()
             };
             return View(model);
         }
-
-        //Update Patient profile
-        [Authorize(Roles = "Patient")]
-        public ActionResult UpdateProfile(string id)
-        {
-            var patient = db.Patients.Single(c => c.ApplicationUserId == id);
-            return View(patient);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateProfile(string id, Patient model)
-        {
-            var patient = db.Patients.Single(c => c.ApplicationUserId == id);
-            patient.FirstName = model.FirstName;
-            patient.LastName = model.LastName;
-            patient.FullName = model.FirstName + " " + model.LastName;
-            patient.Contact = model.Contact;
-            patient.Address = model.Address;
-            patient.BloodGroup = model.BloodGroup;
-            patient.DateOfBirth = model.DateOfBirth;
-            patient.Gender = model.Gender;
-            patient.PhoneNo = model.PhoneNo;
-            db.SaveChanges();
-            return View();
-        }
-
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
         //Start Appointment Section
 
         //Add Appointment
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient")]        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         public ActionResult AddAppointment()
         {
             var collection = new AppointmentCollection
@@ -87,37 +106,9 @@ namespace Hospital_Management_System.Controllers
                 Doctors = db.Doctors.ToList()
             };
             return View(collection);
-        }
+        }        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddAppointment(AppointmentCollection model)
-        {
-            var collection = new AppointmentCollection
-            {
-                Appointment = model.Appointment,
-                Doctors = db.Doctors.ToList()
-            };
-            if (model.Appointment.AppointmentDate >= DateTime.Now.Date)
-            {
-                string user = User.Identity.GetUserId();
-                var patient = db.Patients.Single(c => c.ApplicationUserId == user);
-                var appointment = new Appointment();
-                appointment.PatientId = patient.Id;
-                appointment.DoctorId = model.Appointment.DoctorId;
-                appointment.AppointmentDate = model.Appointment.AppointmentDate;
-                appointment.Problem = model.Appointment.Problem;
-                appointment.Status = false;
 
-                db.Appointments.Add(appointment);
-                db.SaveChanges();
-                return RedirectToAction("ListOfAppointments");
-            }
-            ViewBag.Messege = "Please Enter the Date greater than today or equal!!";
-            
-            return View(collection);
-
-        }
 
         //List of Appointments
         [Authorize(Roles = "Patient")]
@@ -126,7 +117,8 @@ namespace Hospital_Management_System.Controllers
             string user = User.Identity.GetUserId();
             var patient = db.Patients.Single(c => c.ApplicationUserId == user);
             var appointment = db.Appointments.Include(c => c.Doctor).Where(c => c.PatientId == patient.Id).ToList();
-            return View(appointment);
+            return View(appointment);        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         }
 
         //Edit Appointment
@@ -140,6 +132,46 @@ namespace Hospital_Management_System.Controllers
             };
             return View(collection);
         }
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddAppointment(AppointmentCollection model)
+        {
+            var collection = new AppointmentCollection
+            {
+                Appointment = model.Appointment,
+                Doctors = db.Doctors.ToList()
+            };        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            if (model.Appointment.AppointmentDate >= DateTime.Now.Date)
+            {
+                string user = User.Identity.GetUserId();
+                var patient = db.Patients.Single(c => c.ApplicationUserId == user);
+                var appointment = new Appointment();
+                appointment.PatientId = patient.Id;
+                appointment.AppointmentDate = model.Appointment.AppointmentDate;        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+                appointment.Problem = model.Appointment.Problem;
+                appointment.Status = false;
+                appointment.DoctorId = model.Appointment.DoctorId;
+
+
+                db.Appointments.Add(appointment);
+                db.SaveChanges();
+                return RedirectToAction("ListOfAppointments");
+            }
+            ViewBag.Messege = "Please Enter the Date greater than today or equal!!";
+            //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            return View(collection);
+
+        }
+
+
+
+
+        //End Appointment Section        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -153,13 +185,17 @@ namespace Hospital_Management_System.Controllers
             if (model.Appointment.AppointmentDate >= DateTime.Now.Date)
             {
                 var appointment = db.Appointments.Single(c => c.Id == id);
-                appointment.DoctorId = model.Appointment.DoctorId;
                 appointment.AppointmentDate = model.Appointment.AppointmentDate;
-                appointment.Problem = model.Appointment.Problem;
+                appointment.Problem = model.Appointment.Problem;        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+
+                appointment.DoctorId = model.Appointment.DoctorId;
+
                 db.SaveChanges();
                 return RedirectToAction("ListOfAppointments");
             }
             ViewBag.Messege = "Please Enter the Date greater than today or equal!!";
+            //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
             return View(collection);
         }
@@ -170,22 +206,30 @@ namespace Hospital_Management_System.Controllers
         {
             var appointment = db.Appointments.Single(c => c.Id == id);
             return View(appointment);
-        }
+        }        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
 
         [HttpPost, ActionName("DeleteAppointment")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteAppointment(int id)
         {
             var appointment = db.Appointments.Single(c => c.Id == id);
-            db.Appointments.Remove(appointment);
+            db.Appointments.Remove(appointment);        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
             db.SaveChanges();
             return RedirectToAction("ListOfAppointments");
         }
-
-        //End Appointment Section
-
         //Start Doctor Section
 
+        //Show Doctor Schedule
+        [Authorize(Roles = "Patient")]
+        public ActionResult DoctorSchedule(int id)
+        {
+            var schedule = db.Schedules.Include(c => c.Doctor).Single(c => c.DoctorId == id);        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            return View(schedule);
+        }
         //List of Available Doctors
         [Authorize(Roles = "Patient")]
         public ActionResult AvailableDoctors()
@@ -194,17 +238,10 @@ namespace Hospital_Management_System.Controllers
             return View(doctor);
         }
 
-        //Show Doctor Schedule
-        [Authorize(Roles = "Patient")]
-        public ActionResult DoctorSchedule(int id)
-        {
-            var schedule = db.Schedules.Include(c => c.Doctor).Single(c => c.DoctorId == id);
-            return View(schedule);
-        }
-
         //Doctor Detail
         [Authorize(Roles = "Patient")]
-        public ActionResult DoctorDetail(int id)
+        public ActionResult DoctorDetail(int id)        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         {
             var doctor = db.Doctors.Include(c => c.Department).Single(c => c.Id == id);
             return View(doctor);
@@ -214,23 +251,13 @@ namespace Hospital_Management_System.Controllers
 
         //Start Complaint Section
 
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient")]        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         public ActionResult AddComplain()
         {
             return View();
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddComplain(Complaint model)
-        {
-            var complain = new Complaint();
-            complain.Complain = model.Complain;
-            complain.ComplainDate = DateTime.Now.Date;
-            db.Complaints.Add(complain);
-            db.SaveChanges();
-            return RedirectToAction("ListOfComplains");
-        }
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
         [Authorize(Roles = "Patient")]
         public ActionResult ListOfComplains()
@@ -239,49 +266,74 @@ namespace Hospital_Management_System.Controllers
             return View(complain);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddComplain(Complaint model)        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        {
+            var complain = new Complaint();
+            complain.ComplainDate = DateTime.Now.Date;
+            complain.Complain = model.Complain;
+
+            db.Complaints.Add(complain);
+            db.SaveChanges();        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+            return RedirectToAction("ListOfComplains");
+        }        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+
         [Authorize(Roles = "Patient")]
         public ActionResult EditComplain(int id)
         {
             var complain = db.Complaints.Single(c => c.Id == id);
             return View(complain);
         }
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditComplain(int id, Complaint model)
-        {
-            var complain = db.Complaints.Single(c => c.Id == id);
-            complain.Complain = model.Complain;
-            db.SaveChanges();
-            return RedirectToAction("ListOfComplains");
-        }
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
         [Authorize(Roles = "Patient")]
         public ActionResult DeleteComplain()
         {
-            return View();
+            return View();        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditComplain(int id, Complaint model)        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
+        {
+            var complain = db.Complaints.Single(c => c.Id == id);
+            complain.Complain = model.Complain;
+            db.SaveChanges();
+            return RedirectToAction("ListOfComplains");        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         }
 
         [HttpPost, ActionName("DeleteComplain")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteComplain(int id)
+        public ActionResult DeleteComplain(int id)        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         {
             var complain = db.Complaints.Single(c => c.Id == id);
             db.Complaints.Remove(complain);
             db.SaveChanges();
             return RedirectToAction("ListOfComplains");
         }
+        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
 
         //End Complain Section
 
         //Start Prescription Section
 
-        //List of Prescription
+        //List of Prescription        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
         [Authorize(Roles = "Patient")]
         public ActionResult ListOfPrescription()
         {
             string user = User.Identity.GetUserId();
-            var patient = db.Patients.Single(c => c.ApplicationUserId == user);
+            var patient = db.Patients.Single(c => c.ApplicationUserId == user);        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
             var prescription = db.Prescription.Include(c => c.Doctor).Where(c => c.PatientId == patient.Id).ToList();
             return View(prescription);
         }
@@ -289,7 +341,8 @@ namespace Hospital_Management_System.Controllers
         //Prescription View
         public ActionResult PrescriptionView(int id)
         {
-            var prescription = db.Prescription.Single(c => c.Id == id);
+            var prescription = db.Prescription.Single(c => c.Id == id);        //THIS CODE IS THE PROPERTY OF SAUD AHMED ABBASI
+
             return View(prescription);
         }
 
